@@ -1,55 +1,86 @@
-# Minecraft Transit Railway (MTR)
+# Minecraft Transit Railway 4.0.5
 
 [简体中文](./README.md) · English
 
-Build and schedule public transit in Minecraft. Lay tracks, define platforms and sidings, then configure routes and timetables. The RongMC port retains the MTR 4.0.5 simulation and adapts it to 26.3 rendering, physical track blocks, and native transport entities.
 
-## Download and installation
+_Minecraft Transit Railway_ is a [Minecraft mod](https://minecraft.wiki/w/Mods) that allows you to build your own transport network with automated trains, boats, cable cars, and planes!
 
-- Version · [v4.0.5-port.1+26.3](https://github.com/OpenRongMC/Minecraft-Transit-Railway/releases/tag/v4.0.5-port.1%2B26.3) (Release)
-- Release asset · `rongmc-mtr-4.0.5-port.1.26.3.jar`
-- Runtime · Minecraft Java 26.3, Fabric, Java 25
-- Fabric Loader · `>=0.19.3`
-- Fabric mod ID · `rongmc_mtr`
-- Dependencies declared by the JAR · [Fabric API](https://modrinth.com/mod/fabric-api)
+This is the RongMC Fabric port for Minecraft 26.3. The vehicle simulation code is separated from the Minecraft instance, reducing lag on Minecraft servers.
 
-Place the release JAR in the instance’s `mods/` directory. Use the same release family of MTR and your chosen addons on both sides of a multiplayer installation. For the Oriel appearance, install RongMC Transport UI and Oriel on the client. Check the dependency ranges for any addons you select.
+## Major Features
 
-## How to try it
+- Custom train configuration
+- Realistic bogies and train movement
+- Improved signalling
+- Sideways elevators
+- OBJ features ported over from Nemo's Transit Expansion
+- Vehicle swaying effect
+- New online system map and OneBusAway integration
+- Client-side FPS improvements and server-side TPS improvements
 
-In a fresh creative world, connect a short track, platform and siding, then schedule one route and confirm the train departs and stops. Test junctions, platform doors, trains and lifts on a copy of any existing world. Import Blockbench, OBJ or MQO models through the resource-pack creator and distribute the same resource pack to multiplayer clients.
+[See these features in detail.](https://www.youtube.com/playlist?list=PLp0jZgheSlXuQCXu9UynrKuBnq2Ef_TSI)
 
-## Older worlds and custom vehicles
+[![Video Trailer](https://github.com/jonafanho/Minecraft-Transit-Railway/blob/master/images/footer/video-preview.png)](https://www.youtube.com/watch?v=1cZfU7t4cAk)
 
-Legacy rail data can convert into physical track blocks when compatible chunks load. Routes and timetables still drive the services, while vehicle models and collision use the native entity path. Verify boarding and onboard movement with the vehicles and platforms in your own save.
+Please report any issues or bugs you find; that would be greatly appreciated! Refer to the [todo list](https://github.com/jonafanho/Minecraft-Transit-Railway/projects/2) to see currently known issues.
 
-Group moving parts such as doors and bogies before exporting, then enable the pack in Minecraft. When replacing an existing vehicle’s appearance under the same ID, validate door groups and materials on a test consist.
+## What changed in the RongMC 26.3 port
 
-The release JAR already bundles the matching mapping layer. Install the MTR release JAR and then add dependencies such as Filters API if your chosen addons require them.
+- **Native transport entities.** Train cars and lift cabins use entity models, position interpolation and collision while the existing simulation runs the services. Boarding and movement depend on door and stop configuration.
+- **Physical track blocks.** Compatible legacy rails convert as chunks load, with collision and the existing rail network and schedules retained.
+- **Custom vehicles.** Import Blockbench, OBJ or MQO models in the resource-pack creator. Group moving parts such as doors and bogies, and distribute the same pack to multiplayer clients.
+- **Interface and rendering.** Rendering and SDL input use the 26.3 paths. RongMC Transport UI adds an optional switch between Classic and Oriel.
 
-## Working from source
+## Installation
 
-```sh
-./gradlew tasks
-```
+Download **v4.0.5-port.1+26.3** from [GitHub Releases](https://github.com/OpenRongMC/Minecraft-Transit-Railway/releases/tag/v4.0.5-port.1%2B26.3) for Minecraft Java **26.3** on **Fabric** with **Java 25**. Dependencies include [Fabric API](https://modrinth.com/mod/fabric-api). Place the release JAR in the instance’s `mods/` directory. Use the same release family of MTR and your chosen addons on both sides of a multiplayer installation. For the Oriel appearance, install RongMC Transport UI and Oriel on the client. Check the dependency ranges for any addons you select.
 
-Build with the coordinated transport workspace. The standalone repository retains historical platform files, so those Gradle settings alone do not recreate the published JAR.
+Upstream releases and project information are available on [Modrinth](https://modrinth.com/mod/minecraft-transit-railway).
 
-## Documentation and support
+## Guide
 
-- [Previous README (historical guide, contributors and credits)](https://github.com/OpenRongMC/Minecraft-Transit-Railway/blob/9f150720a4b818ff789b167931791d8b4849c4ed/README.md)
-- [Upstream project and documentation](https://github.com/jonafanho/Minecraft-Transit-Railway)
-- [Filters API](https://github.com/OpenRongMC/Filters-API)
-- [MTR Platform Mappings and Compatibility](https://github.com/OpenRongMC/Minecraft-Mappings)
-- [Joban Client Mod (JCM)](https://github.com/OpenRongMC/Joban-Client-Mod)
-- [London Underground Addon](https://github.com/OpenRongMC/London-Underground)
-- [Russian Metro Addon](https://github.com/OpenRongMC/Russian-Metro)
-- [Tianjin Metro Addon](https://github.com/OpenRongMC/Tianjin-Metro)
-- [MTR Station Decoration Addon (MSD)](https://github.com/OpenRongMC/MSD)
-- [Yunzhu Transit Extension (YTE)](https://github.com/OpenRongMC/Yunzhu-Transit)
-- [RongMC Transport UI](https://github.com/OpenRongMC/RongMC-Transport-UI)
-- [Report a RongMC port issue](https://github.com/OpenRongMC/Minecraft-Transit-Railway/issues) · Include the game version, client and server JAR names, reproduction steps and relevant logs.
+There is a [new wiki](https://wiki.minecrafttransitrailway.com/start) for the mod. Take a look.
 
-## License and credits
+## Recommended Addons
 
-See this repository’s [LICENSE](./LICENSE) and the original project’s license, credits and third-party asset notices.
+- [MTR London Underground Addon](https://modrinth.com/mod/the-tube)
+- [Joban Client Mod](https://modrinth.com/mod/jcm)
+- [Station Decoration](https://modrinth.com/mod/station-decoration)
+- [Russian Metro Addon](https://modrinth.com/mod/russian-metro-addon)
+
+## Contributing
+
+### Help Translate the Mod!
+
+The [Crowdin site for the Minecraft Transit Railway mod](https://crwd.in/minecraft-transit-railway) is available!
+
+Crowdin is a cloud-based platform for translators to contribute to a project. With your help, we can translate the mod into many different languages. You may create a free account to start translating.
+
+[![Crowdin](https://badges.crowdin.net/minecraft-transit-railway/localized.svg)](https://crowdin.com/project/minecraft-transit-railway)
+
+### Adding Features
+
+1. Fork this project
+2. On your fork, create a new branch based on the development version branch
+3. Commit your changes to the new branch
+4. Make a Pull Request to merge your branch into the development version of this repository
+
+### Building
+
+Use Java 25 and build MTR with the matching 26.3 transport workspace and [Minecraft Mappings](https://github.com/OpenRongMC/Minecraft-Mappings). The workspace also builds the web-based model creator.
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). All [Noto fonts](http://www.google.com/get/noto/), bundled with this mod, are licensed under the [Open Font License](http://scripts.sil.org/OFL).
+
+## Questions? Comments? Complaints?
+
+Let's connect.
+
+<a href="https://discord.gg/PVZ2nfUaTW" target="_blank"><img src="https://github.com/jonafanho/Minecraft-Transit-Railway/blob/master/images/footer/discord.png" alt="Discord" width=64></a>
+&nbsp;
+<a href="https://www.linkedin.com/in/jonathanho33" target="_blank"><img src="https://github.com/jonafanho/Minecraft-Transit-Railway/blob/master/images/footer/linked_in.png" alt="LinkedIn" width=64></a>
+&nbsp;
+<a href="mailto:jonho.minecraft@gmail.com" target="_blank"><img src="https://github.com/jonafanho/Minecraft-Transit-Railway/blob/master/images/footer/email.png" alt="Email" width=64></a>
+&nbsp;
+<a href="https://www.patreon.com/minecraft_transit_railway" target="_blank"><img src="https://github.com/jonafanho/Minecraft-Transit-Railway/blob/master/images/footer/patreon.png" alt="Patreon" width=64></a>

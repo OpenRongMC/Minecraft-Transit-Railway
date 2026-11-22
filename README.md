@@ -1,55 +1,51 @@
-# 我的世界铁路（MTR）
+# 我的世界铁路 4.0.5
 
 简体中文 · [English](./README.en.md)
 
-在 Minecraft 里建造并调度公共交通。用轨道、站台、侧线、线路和时刻表组织列车运行，也可布置电梯、扶梯和站内设施。RongMC 26.3 移植保留 MTR 4.0.5 的交通模拟，适配了原版渲染提交、轨道方块和原生载具实体。
 
-## 下载与安装
+我的世界铁路（Minecraft Transit Railway，MTR）让你在 Minecraft 里建造自己的公共交通系统。布设轨道、站台和侧线，设置路线与时刻表，让列车、轮船、缆车和飞机自动运行。交通模拟与 Minecraft 实例分开运行，以减轻服务端负担。
 
-- 版本 · [v4.0.5-port.1+26.3](https://github.com/OpenRongMC/Minecraft-Transit-Railway/releases/tag/v4.0.5-port.1%2B26.3) (已发布)
-- 下载文件 · `rongmc-mtr-4.0.5-port.1.26.3.jar`
-- 运行环境 · Minecraft Java 26.3, Fabric, Java 25
-- Fabric Loader · `>=0.19.3`
-- Fabric 模组 ID · `rongmc_mtr`
-- JAR 声明的依赖 · [Fabric API](https://modrinth.com/mod/fabric-api)
+## 主要特色
 
-把发行 JAR 放入对应实例的 `mods/` 目录。联机时两端安装同一发布系列的 MTR 与所选交通扩展。需要 Oriel 外观时，只在客户端额外安装 RongMC Transport UI 和 Oriel。安装前先核对扩展的依赖与适用版本。
+- 自定义列车编组、车体和外观，车辆拥有转向架、行驶摆动及更真实的运动。
+- 使用车站、线路、侧线和信号规划列车运营。
+- 建造电梯、扶梯及横向运行的电梯，并搭配车站设备和屏蔽门。
+- 通过在线系统地图查看线路，或接入 OneBusAway。
+- 支持 OBJ 车辆资源及来自 Nemo's Transit Expansion 的部分模型能力。
 
-## 如何验证
+[![视频预告](https://github.com/jonafanho/Minecraft-Transit-Railway/blob/master/images/footer/video-preview.png)](https://www.youtube.com/watch?v=1cZfU7t4cAk)
 
-在新创意世界先连接一段轨道、站台和侧线，配置一条线路，确认列车能发车和停靠。旧世界应先复制，重点检查道岔、站台门、列车和电梯。自定义列车经资源包创建器导入 Blockbench、OBJ 或 MQO 模型。联机需让玩家使用相同资源包。
+[上游功能演示](https://www.youtube.com/playlist?list=PLp0jZgheSlXuQCXu9UynrKuBnq2Ef_TSI)
 
-## 旧世界与自定义列车
+## RongMC 26.3 版本的改动
 
-旧轨道数据在兼容的区块加载后可转换成实际轨道方块。列车仍由原路线和时刻表驱动，载具的模型和碰撞则走新版实体路径。不同车型和站台配置的载客行为需结合现有存档实测。
+- **原生交通实体。** 列车车厢、电梯轿厢使用实体模型、位置插值与碰撞，原有交通模拟仍负责运行。支持进出停靠载具和随车移动，具体表现取决于车门和停靠配置。
+- **实际轨道方块。** 兼容的旧轨道随区块加载转换为带碰撞的轨道方块，继续使用原有轨道网络与调度。
+- **自定义车辆。** 通过资源包创建器导入 Blockbench、OBJ 或 MQO 模型。车门、转向架等活动部分可分组，联机客户端使用同一份资源包。
+- **界面与渲染。** 适配 26.3 原版渲染与 SDL 输入。搭配 RongMC Transport UI 可在经典界面和 Oriel 界面间切换。
 
-导入时将车门、转向架等活动部件分组，导出后在资源包界面启用。用同一车辆 ID 替换现有车型外观时，先在编组副本上验证车门分组和材质。
+## 安装
 
-发行 JAR 已内嵌所需映射层。一般只需安装 MTR 发行 JAR，再按所选扩展补齐例如 Filters API 的依赖。
+在 [GitHub Releases](https://github.com/OpenRongMC/Minecraft-Transit-Railway/releases/tag/v4.0.5-port.1%2B26.3) 下载 **v4.0.5-port.1+26.3**。使用 Minecraft Java **26.3**、**Fabric** 和 **Java 25**。 依赖 [Fabric API](https://modrinth.com/mod/fabric-api)。 将发行 JAR 放进实例的 `mods/` 目录。 联机时两端安装同一发布系列的 MTR 与所选交通扩展。需要 Oriel 外观时，只在客户端额外安装 RongMC Transport UI 和 Oriel。安装前先核对扩展的依赖与适用版本。
 
-## 从源码开始
+## 玩法指南
 
-```sh
-./gradlew tasks
-```
+参阅 [MTR Wiki](https://wiki.minecrafttransitrailway.com/start)。如果是第一次搭线路，可以先完成「轨道 → 站台 → 侧线 → 路线」的流程，再在侧线配置发车和车型。
 
-从开发所用的交通套件根目录联动构建。单仓保留历史平台目录，不能仅凭其中的旧 Gradle 配置重建发布 JAR。
+## 推荐扩展
 
-## 文档与反馈
-
-- [原 README（旧版指南、贡献者与署名）](https://github.com/OpenRongMC/Minecraft-Transit-Railway/blob/9f150720a4b818ff789b167931791d8b4849c4ed/README.md)
-- [上游项目与文档](https://github.com/jonafanho/Minecraft-Transit-Railway)
-- [创造栏筛选 API](https://github.com/OpenRongMC/Filters-API)
-- [MTR 平台映射与兼容层](https://github.com/OpenRongMC/Minecraft-Mappings)
 - [常磐客户端模组（JCM）](https://github.com/OpenRongMC/Joban-Client-Mod)
-- [伦敦地铁扩展](https://github.com/OpenRongMC/London-Underground)
-- [俄罗斯地铁扩展](https://github.com/OpenRongMC/Russian-Metro)
-- [天津地铁扩展](https://github.com/OpenRongMC/Tianjin-Metro)
-- [MTR 车站装饰扩展（MSD）](https://github.com/OpenRongMC/MSD)
+- [伦敦地铁](https://github.com/OpenRongMC/London-Underground)
+- [俄罗斯地铁](https://github.com/OpenRongMC/Russian-Metro)
+- [天津地铁](https://github.com/OpenRongMC/Tianjin-Metro)
+- [车站装饰（MSD）](https://github.com/OpenRongMC/MSD)
 - [云竹交通扩展（YTE）](https://github.com/OpenRongMC/Yunzhu-Transit)
-- [RongMC 交通界面](https://github.com/OpenRongMC/RongMC-Transport-UI)
-- [报告 RongMC 移植问题](https://github.com/OpenRongMC/Minecraft-Transit-Railway/issues) · 请附游戏版本、两端 JAR 文件名、复现步骤和相关日志。
+- [Oriel 界面适配](https://github.com/OpenRongMC/RongMC-Transport-UI)
 
-## 许可与署名
+## 参与开发
 
-请参阅本仓库的 [LICENSE](./LICENSE) 及原项目的许可、署名和第三方资源说明。
+使用 Java 25，在配套的交通套件工作区与 [Minecraft Mappings](https://github.com/OpenRongMC/Minecraft-Mappings) 一起构建。翻译可参加[上游 Crowdin](https://crowdin.com/project/minecraft-transit-railway)，游戏问题可在 [RongMC Issues](https://github.com/OpenRongMC/Minecraft-Transit-Railway/issues) 反馈。
+
+## 许可
+
+上游项目采用 [MIT](https://opensource.org/licenses/MIT)。内置 Noto 字体使用 [Open Font License](https://openfontlicense.org/)。[上游仓库](https://github.com/jonafanho/Minecraft-Transit-Railway)。
