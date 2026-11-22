@@ -1,0 +1,79 @@
+.creator-shell {
+	box-sizing: border-box;
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr);
+	gap: clamp(.75rem, 2.5vw, 1.5rem);
+	width: min(100%, 100rem);
+	height: 100%;
+	margin: auto;
+	padding: clamp(.75rem, 2.5vw, 2rem);
+}
+
+.creator-header {
+	display: flex;
+	align-items: center;
+	gap: .75rem;
+	padding-bottom: .85rem;
+	border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.creator-header h1 {
+	font-family: system-ui, sans-serif;
+	font-size: clamp(1.2rem, 3vw, 1.75rem);
+	font-weight: 620;
+}
+
+.creator-icon {
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: .65rem;
+	background: var(--mat-sys-primary-container);
+	color: var(--mat-sys-on-primary-container);
+}
+
+mat-stepper {
+	min-height: 0;
+	border: 1px solid var(--mat-sys-outline-variant);
+	border-radius: .85rem;
+	overflow: hidden;
+}
+
+::ng-deep .mat-horizontal-stepper-wrapper {
+	display: flex;
+	height: 100%;
+	min-height: 0;
+}
+::ng-deep .mat-horizontal-stepper-header-container {
+	flex: 0 0 auto;
+	overflow-x: auto;
+	border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+::ng-deep .mat-horizontal-content-container {
+	flex: 1 1 auto;
+	min-height: 0;
+	padding: 0 !important;
+}
+::ng-deep .mat-horizontal-stepper-content {
+	height: 100%;
+	min-height: 0;
+}
+
+
+@media (max-width: 620px) {
+	::ng-deep .mat-horizontal-stepper-header {
+		flex: 0 0 auto;
+		height: 3rem !important;
+		padding-inline: .5rem !important;
+	}
+
+	::ng-deep .mat-horizontal-stepper-header .mat-step-icon {
+		margin-right: .35rem;
+	}
+
+	::ng-deep .mat-stepper-horizontal-line {
+		min-width: 0 !important;
+		margin: 0 !important;
+	}
+}

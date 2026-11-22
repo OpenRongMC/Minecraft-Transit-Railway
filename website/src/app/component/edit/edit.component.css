@@ -1,0 +1,16 @@
+.vehicle-color {
+	border-left: 4px solid;
+	padding-left: 4px;
+}
+
+
+.editor-layout {
+	box-sizing: border-box;
+	min-width: 0;
+	padding: .85rem;
+}
+
+.editor-actions {
+	flex-wrap: wrap;
+	flex: 0 0 auto;
+}

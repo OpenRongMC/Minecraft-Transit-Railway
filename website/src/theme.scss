@@ -1,0 +1,12 @@
+@use "@angular/material" as mat;
+
+html {
+	color-scheme: dark;
+	@include mat.theme((
+			color: mat.$azure-palette,
+			typography: (
+					plain-family: system-ui,
+					brand-family: system-ui,
+			),
+	));
+}

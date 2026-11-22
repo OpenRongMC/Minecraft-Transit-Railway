@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "east_west=false": {
+      "model": "mtr:block/physical_rail"
+    },
+    "east_west=true": {
+      "model": "mtr:block/physical_rail",
+      "y": 90
+    }
+  }
+}

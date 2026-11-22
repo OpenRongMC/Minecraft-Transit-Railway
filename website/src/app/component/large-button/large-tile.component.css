@@ -1,0 +1,29 @@
+.square {
+	border: 1px solid var(--mat-sys-outline-variant);
+	border-radius: 14px;
+	color: var(--mat-select-placeholder-text-color);
+	text-align: center;
+	box-sizing: border-box;
+	width: min(320px, calc(100vw - 4rem));
+	min-height: 172px;
+	padding: 1rem;
+}
+
+.large-icon {
+	font-size: 42px;
+	width: 42px;
+	height: 42px;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.clickable:hover, .clickable:focus-visible {
+	border-color: var(--mat-sys-primary);
+	background-color: var(--mat-sys-surface-container-high);
+}
+
+.square.disabled {
+	color: #7F7F7F7F;
+}

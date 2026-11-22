@@ -1,0 +1,15 @@
+code {
+	font-family: "Courier New", monospace;
+	text-align: center;
+}
+
+.fields {
+	width: 50%;
+}
+
+
+@media (max-width: 620px) {
+	.fields {
+		width: calc(100% - 2rem);
+	}
+}

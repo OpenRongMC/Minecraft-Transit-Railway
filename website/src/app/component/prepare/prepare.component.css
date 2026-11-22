@@ -1,0 +1,11 @@
+.start-actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: .9rem;
+	padding: 1rem;
+}
+
+.uploader {
+	height: 24px;
+}

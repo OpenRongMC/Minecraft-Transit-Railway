@@ -1,0 +1,20 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "mtr:legacy_predicate",
+    "predicate": "mtr:selected",
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "mtr:item/signal_remover_orange"
+    },
+    "entries": [
+      {
+        "threshold": 1,
+        "model": {
+          "type": "minecraft:model",
+          "model": "mtr:item/signal_remover_orange_selected"
+        }
+      }
+    ]
+  }
+}

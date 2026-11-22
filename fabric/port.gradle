@@ -1,0 +1,61 @@
+// Minecraft 26.3 configuration is shared by the root build.
+dependencies {
+    implementation 'com.logisticscraft:occlusionculling:0.0.9-SNAPSHOT'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.14.4'
+}
+test { useJUnitPlatform() }
+
+sourceSets.main.java.exclude('org/mtr/mixin/PerspectiveProjectionMatrixBufferMixin.java', 'org/mtr/mixin/LevelRendererRenderMatricesMixin.java')
+dependencies { testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.14.4' }
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = 'rongmc_transport_test'
+        enableGameTests = false
+        enableClientGameTests = true
+    }
+}
+loom.runs.named('clientGameTest') {
+    def classicOnly = providers.gradleProperty('noOrielQa').isPresent()
+    runDir = rootProject.file(classicOnly ? '.port/runtime/gametest-classic' : '.port/runtime/gametest').absolutePath
+    vmArgs '-Dorg.lwjgl.opengl.libname=libGL.so.1'
+    if (classicOnly) vmArgs '-Dmtr.qaSkipLegacyWorld=true'
+}
+dependencies {
+    ['filters', 'jcm', 'london', 'russian', 'msd', 'tianjin', 'yte'].each { addon -> gametestRuntimeOnly project(":${addon}") }
+    gametestRuntimeOnly 'me.shedaniel.cloth:cloth-config-fabric:26.3.159'
+}
+tasks.register('generateCreatorTypes') {
+    def schemas = file('../buildSrc/src/main/resources/schema/resource')
+    def destination = file('../website/src/app/entity/generated')
+    def generator = file('../libs/Transport-Simulation-Core-Build-Tools.jar')
+    inputs.dir schemas
+    inputs.file generator
+    outputs.dir destination
+    doLast {
+        def libraries = configurations.compileClasspath.files.findAll { library ->
+            ['fastutil-', 'gson-', 'log4j-api-', 'log4j-core-', 'commons-io-'].any { library.name.startsWith(it) }
+        }
+        def urls = ([generator] + libraries).collect { it.toURI().toURL() } as URL[]
+        new URLClassLoader(urls, getClass().classLoader).withCloseable { loader ->
+            def generate = loader.loadClass('org.mtr.core.Generator').getMethod('generateTypeScript', Project, String, String)
+            generate.invoke(null, project, schemas.absolutePath, destination.absolutePath)
+        }
+    }
+}
+
+processResources {
+    from('../website/dist/website/browser') {
+        into 'mtr/creator'
+    }
+}
+
+dependencies {
+    gametestRuntimeOnly project(':transport-ui')
+    gametestCompileOnly project(':filters')
+    def oriel = files(rootProject.file('addons/RongMC-Transport-UI/libs/oriel-fabric-26.3-0.15.0.jar'))
+    gametestCompileOnly oriel
+    if (!providers.gradleProperty('noOrielQa').isPresent()) {
+        gametestRuntimeOnly oriel
+    }
+}
