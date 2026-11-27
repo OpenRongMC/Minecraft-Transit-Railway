@@ -154,9 +154,11 @@ public final class TransportGameTest implements FabricClientGameTest {
             entity.configure(2, 2, 3, true);
             check(level.getBlockState(landing).getCollisionShape(level, landing).isEmpty(), "Open landing door still blocked the player");
             player.move(net.minecraft.world.entity.MoverType.SELF, step);
+            final Vec3 entry = player.position();
             entity.tick();
             check(player.getVehicle() == entity, "Walking through the open doorway did not board");
             final Vec3 prior = entity.getPassengerRidingPosition(player);
+            check(prior.distanceTo(entry) < 0.01, "Boarding changed the player's feet position");
             entity.configure(2, 2, 3, false);
             entity.setPos(center.add(0, 2, 0));
             check(entity.getPassengerRidingPosition(player).y > prior.y + 1.9,
@@ -171,7 +173,14 @@ public final class TransportGameTest implements FabricClientGameTest {
             entity.configure(2, 2, 3, true);
             player.setYRot(0);
             player.setLastClientInput(new net.minecraft.world.entity.player.Input(false, car < 0, false, car >= 0, false, false, false));
-            for (int i = 0; i < 8 && player.getVehicle() == entity; i++) entity.tick();
+            for (int i = 0; i < 12 && player.getVehicle() == entity; i++) {
+                final Vec3 before = entity.getPassengerRidingPosition(player);
+                player.setPos(before);
+                entity.tick();
+                if (player.getVehicle() == null) {
+                    check(player.position().distanceTo(before) <= .101, "Walking out jumped farther than one step");
+                }
+            }
             check(player.getVehicle() != entity && !entity.getBoundingBox().contains(player.position()),
                     "Walking back through the doorway did not dismount");
         } finally {
@@ -448,6 +457,12 @@ public final class TransportGameTest implements FabricClientGameTest {
         test.setScreen(() -> new org.mtr.mod.screen.DashboardScreen(org.mtr.core.data.TransportMode.TRAIN));
         test.waitForScreen(org.mtr.mod.screen.DashboardScreen.class);
         test.takeScreenshot("mtr-dashboard");
+        final var dashboard = test.computeOnClient(client -> client.gui.screen());
+        clickButton(test, "menu.options");
+        test.waitFor(client -> client.gui.screen() instanceof ConfigScreen
+                || client.gui.screen().getClass().getSimpleName().equals("OrielMtrSettings"));
+        test.getInput().pressKey(com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE);
+        test.waitFor(client -> client.gui.screen() == dashboard);
         clickButton(test, "gui.mtr.model_library");
         test.waitForScreen(org.mtr.mod.screen.TrainModelLibraryScreen.class);
         test.takeScreenshot("mtr-model-library");
@@ -456,8 +471,8 @@ public final class TransportGameTest implements FabricClientGameTest {
         test.runOnClient(client -> client.gui.screen().onClose());
         test.waitForScreen(org.mtr.mod.screen.TrainModelLibraryScreen.class);
         test.waitFor(client -> client.gui.overlay() == null);
-        clickButton(test, "gui.back");
-        test.waitForScreen(org.mtr.mod.screen.DashboardScreen.class);
+        test.getInput().pressKey(com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE);
+        test.waitFor(client -> client.gui.screen() == dashboard);
 
         final int creatorPort = test.computeOnClient(client -> org.mtr.mod.InitClient.getServerPort());
         check(creatorPort > 0, "The game did not expose the model creator");

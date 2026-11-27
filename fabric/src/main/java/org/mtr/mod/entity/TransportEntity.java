@@ -82,7 +82,8 @@ public final class TransportEntity extends Entity {
 	private final HashSet<UUID> publishedDrivers = new HashSet<>();
 	private long sidingId;
 	private static final double RIDER_MARGIN = 0.35;
-	private static final double FLOOR_HEIGHT = 0.15;
+	private static final double FLOOR_THICKNESS = 0.15;
+	private Vec3 walkOutPosition;
 
 	void configureTrain(long depotId, long sidingId, boolean manual) {
 		this.sidingId = sidingId;
@@ -137,7 +138,7 @@ public final class TransportEntity extends Entity {
 			if (!offsets.isEmpty()) {
 				for (final String entry : offsets.split(";")) {
 					final String[] fields = entry.split(",");
-					riderOffsets.put(UUID.fromString(fields[0]), new Vec3(Double.parseDouble(fields[1]), 0.15, Double.parseDouble(fields[2])));
+					riderOffsets.put(UUID.fromString(fields[0]), new Vec3(Double.parseDouble(fields[1]), 0, Double.parseDouble(fields[2])));
 				}
 			}
 		}
@@ -178,7 +179,7 @@ public final class TransportEntity extends Entity {
 		if (!hasWalkThroughDoors() || !collidesWith(mover)) return;
 		final AABB box = getBoundingBox();
 		final double thin = 0.125;
-		addCollision(area, collisions, new AABB(box.minX, box.minY - FLOOR_HEIGHT, box.minZ, box.maxX, box.minY, box.maxZ));
+		addCollision(area, collisions, new AABB(box.minX, box.minY - FLOOR_THICKNESS, box.minZ, box.maxX, box.minY, box.maxZ));
 		addCollision(area, collisions, new AABB(box.minX, box.maxY - thin, box.minZ, box.maxX, box.maxY, box.maxZ));
 		final boolean sideAlongX = (Math.round(getYRot() / 90F) & 1) == 0;
 		// Train doors are on the long sides; lift doors are on the short ends.
@@ -221,7 +222,8 @@ public final class TransportEntity extends Entity {
 	}
 
 	private Vec3 localPosition(Vec3 world) {
-		return world.subtract(position()).yRot((float) Math.toRadians(getYRot()));
+		return world.subtract(position()).yRot((float) Math.toRadians(getYRot()))
+				.xRot((float) Math.toRadians(-getXRot()));
 	}
 
 	private void boardPlayersInside() {
@@ -325,7 +327,8 @@ public final class TransportEntity extends Entity {
 
 	@Override
 	public Vec3 getPassengerRidingPosition(Entity passenger) {
-		final Vec3 offset = riderOffsets.getOrDefault(passenger.getUUID(), new Vec3(0, 0.15, 0));
+		final Vec3 offset = riderOffsets.get(passenger.getUUID());
+		if (offset == null) return passenger.position();
 		return position().add(offset.xRot((float) Math.toRadians(getXRot())).yRot((float) Math.toRadians(-getYRot())));
 	}
 
@@ -344,15 +347,16 @@ public final class TransportEntity extends Entity {
 			}
 			applyDriverInput(player, 0);
 			final var input = player.getLastClientInput();
-			final Vec3 initial = player.position().subtract(position()).yRot((float) Math.toRadians(getYRot()));
-			final Vec3 previous = riderOffsets.getOrDefault(player.getUUID(), initial);
+			final Vec3 previous = riderOffsets.getOrDefault(player.getUUID(), localPosition(player.position()));
 			final double speed = input.sprint() ? 0.15 : 0.10;
 			final Vec3 movement = new Vec3((input.left() ? 1 : 0) - (input.right() ? 1 : 0), 0,
 					(input.forward() ? 1 : 0) - (input.backward() ? 1 : 0))
 					.normalize().scale(speed).yRot((float) Math.toRadians(getYRot() - player.getYRot()));
 			final Vec3 next = previous.add(movement);
 			if (hasWalkThroughDoors() && tryWalkOut(player, next)) continue;
-			final Vec3 offset = clampOffset(next);
+			final Vec3 offset = hasWalkThroughDoors() ? openDoorOffset(new Vec3(
+					Mth.clamp(next.x, -cabinWidth() / 2, cabinWidth() / 2), 0,
+					Mth.clamp(next.z, -cabinLength() / 2, cabinLength() / 2))) : clampOffset(next);
 			riderOffsets.put(player.getUUID(), offset);
 			data.append(player.getUUID()).append(',').append(offset.x).append(',').append(offset.z).append(';');
 		}
@@ -363,22 +367,31 @@ public final class TransportEntity extends Entity {
 		final boolean lift = carIndex() < 0;
 		final double limit = (lift ? cabinLength() : cabinWidth()) / 2;
 		final double across = lift ? next.z : next.x;
-		if (Math.abs(across) <= Math.max(0, limit - RIDER_MARGIN)) return false;
-		if (lift && across > 0 && !liftDoubleSided()) return false;
+		if (Math.abs(across) <= limit || lift && across > 0 && !liftDoubleSided()) return false;
 
-		final double doorSide = Math.copySign(limit + player.getBbWidth() / 2 + .08, across);
-		final Vec3 localExit = lift ? new Vec3(next.x, FLOOR_HEIGHT, doorSide) : new Vec3(doorSide, FLOOR_HEIGHT, next.z);
-		final Vec3 exit = position().add(localExit.yRot((float) Math.toRadians(-getYRot())));
+		final Vec3 exit = position().add(openDoorOffset(next).yRot((float) Math.toRadians(-getYRot())));
 		if (!level().noCollision(player, player.getBoundingBox().move(exit.subtract(player.position())))) return false;
-		player.stopRiding();
-		player.teleportTo(exit.x, exit.y, exit.z);
+		walkOutPosition = exit;
+		try {
+			player.stopRiding();
+		} finally {
+			walkOutPosition = null;
+		}
 		return true;
+	}
+
+	private Vec3 openDoorOffset(Vec3 local) {
+		final Vec3 clamped = clampOffset(local);
+		if (carIndex() >= 0) {
+			return new Vec3(local.x, 0, clamped.z);
+		}
+		return new Vec3(clamped.x, 0, liftDoubleSided() ? local.z : Math.min(local.z, clamped.z));
 	}
 
 	private Vec3 clampOffset(Vec3 localPosition) {
 		final double halfWidth = Math.max(0, entityData.get(WIDTH) / 2 - RIDER_MARGIN);
 		final double halfLength = Math.max(0, entityData.get(LENGTH) / 2 - RIDER_MARGIN);
-		return new Vec3(Mth.clamp(localPosition.x, -halfWidth, halfWidth), FLOOR_HEIGHT, Mth.clamp(localPosition.z, -halfLength, halfLength));
+		return new Vec3(Mth.clamp(localPosition.x, -halfWidth, halfWidth), 0, Mth.clamp(localPosition.z, -halfLength, halfLength));
 	}
 
 	public void updatePose(TransportPose pose) {
@@ -435,6 +448,7 @@ public final class TransportEntity extends Entity {
 
 	@Override
 	public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
+		if (walkOutPosition != null) return walkOutPosition;
 		final AABB box = getBoundingBox();
 		final double margin = passenger.getBbWidth() / 2 + 0.05;
 		final Vec3[] exits = {

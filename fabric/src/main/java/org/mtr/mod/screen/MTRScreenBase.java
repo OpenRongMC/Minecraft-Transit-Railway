@@ -27,7 +27,6 @@ public class MTRScreenBase extends ScreenExtension {
 
 	@Override
 	public void onClose2() {
-		super.onClose2();
 		MinecraftClient.getInstance().openScreen(previousScreen);
 	}
 }

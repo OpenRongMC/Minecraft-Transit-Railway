@@ -31,9 +31,11 @@ Please report any issues or bugs you find; that would be greatly appreciated! Re
 - **Custom vehicles.** Import Blockbench, OBJ or MQO models in the resource-pack creator. Group moving parts such as doors and bogies, and distribute the same pack to multiplayer clients.
 - **Interface and rendering.** Rendering and SDL input use the 26.3 paths. RongMC Transport UI adds an optional switch between Classic and Oriel.
 
+The main branch aligns riders’ feet with the cabin floor and preserves their walking step as they cross a train or lift doorway. Pressing Esc in the Train Models library returns to the dashboard.
+
 ## Installation
 
-Download **v4.0.5-port.1+26.3** from [GitHub Releases](https://github.com/OpenRongMC/Minecraft-Transit-Railway/releases/tag/v4.0.5-port.1%2B26.3) for Minecraft Java **26.3** on **Fabric** with **Java 25**. Dependencies include [Fabric API](https://modrinth.com/mod/fabric-api). Place the release JAR in the instance’s `mods/` directory. Use the same release family of MTR and your chosen addons on both sides of a multiplayer installation. For the Oriel appearance, install RongMC Transport UI and Oriel on the client. Check the dependency ranges for any addons you select.
+Download **v4.0.5-port.1+26.3.fix.1** from [GitHub Releases](https://github.com/OpenRongMC/Minecraft-Transit-Railway/releases/tag/v4.0.5-port.1%2B26.3.fix.1) for Minecraft Java **26.3** on **Fabric** with **Java 25**. Dependencies include [Fabric API](https://modrinth.com/mod/fabric-api). Place the release JAR in the instance’s `mods/` directory. Use the same release family of MTR and your chosen addons on both sides of a multiplayer installation. For the Oriel appearance, install RongMC Transport UI and Oriel on the client. Check the dependency ranges for any addons you select.
 
 Upstream releases and project information are available on [Modrinth](https://modrinth.com/mod/minecraft-transit-railway).
 

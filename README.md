@@ -24,9 +24,11 @@
 - **自定义车辆。** 通过资源包创建器导入 Blockbench、OBJ 或 MQO 模型。车门、转向架等活动部分可分组，联机客户端使用同一份资源包。
 - **界面与渲染。** 适配 26.3 原版渲染与 SDL 输入。搭配 RongMC Transport UI 可在经典界面和 Oriel 界面间切换。
 
+主分支修复了走进列车或电梯时的位置偏移。玩家脚底对齐车厢地板，走过门槛时按实际步幅离开；从列车模型库按 Esc 可返回仪表板。
+
 ## 安装
 
-在 [GitHub Releases](https://github.com/OpenRongMC/Minecraft-Transit-Railway/releases/tag/v4.0.5-port.1%2B26.3) 下载 **v4.0.5-port.1+26.3**。使用 Minecraft Java **26.3**、**Fabric** 和 **Java 25**。 依赖 [Fabric API](https://modrinth.com/mod/fabric-api)。 将发行 JAR 放进实例的 `mods/` 目录。 联机时两端安装同一发布系列的 MTR 与所选交通扩展。需要 Oriel 外观时，只在客户端额外安装 RongMC Transport UI 和 Oriel。安装前先核对扩展的依赖与适用版本。
+在 [GitHub Releases](https://github.com/OpenRongMC/Minecraft-Transit-Railway/releases/tag/v4.0.5-port.1%2B26.3.fix.1) 下载 **v4.0.5-port.1+26.3.fix.1**。使用 Minecraft Java **26.3**、**Fabric** 和 **Java 25**。 依赖 [Fabric API](https://modrinth.com/mod/fabric-api)。 将发行 JAR 放进实例的 `mods/` 目录。 联机时两端安装同一发布系列的 MTR 与所选交通扩展。需要 Oriel 外观时，只在客户端额外安装 RongMC Transport UI 和 Oriel。安装前先核对扩展的依赖与适用版本。
 
 ## 玩法指南
 
